@@ -3,17 +3,15 @@ package payment_service
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Payment(
-    val paymentId: Int,
+data class CreatePaymentRequest(
     val title: String,
-    val orderDetails: String,
+    val details: String,
     val amount: Double,
     val paymentMethod: String
 )
 
 @Serializable
-data class Card(
-    val cardId: Int,
+data class CreateCardRequest(
     val cardNumber: String,
     val expiryDate: String,
     val cvv: String
