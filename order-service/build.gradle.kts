@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlin.serialization)
+    application
 }
 
 group = "ru.order_service"
@@ -19,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":payment-service"))
+    implementation(libs.rabbitmq)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
     implementation(libs.logback.classic)
@@ -28,4 +31,3 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
 }
-

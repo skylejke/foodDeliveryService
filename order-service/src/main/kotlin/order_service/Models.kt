@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Order(
-    val orderId: Int,
+    val orderId: String,
     val items: List<CartItem>,
-    val totalAmount: String,
+    val totalAmount: Double,
     val deliveryAddress: String? = null,
     val deliveryMethod: String,
     val status: String,
@@ -15,7 +15,7 @@ data class Order(
 
 @Serializable
 data class CartItem(
-    val mealId: Int,
+    val mealId: String,
     val name: String,
     val quantity: Int,
     val price: Double

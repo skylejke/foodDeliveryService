@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlin.serialization)
+    application
 }
 
 group = "ru.payment_service"
@@ -19,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.rabbitmq)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
     implementation(libs.logback.classic)
@@ -32,4 +34,8 @@ dependencies {
     implementation(libs.postrgre)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+}
+
+application {
+    mainClass.set("payment_service.ApplicationKt")
 }

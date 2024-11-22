@@ -1,19 +1,39 @@
 package order_service
 
-import io.ktor.http.HttpStatusCode
+import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.request.receive
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.util.UUID
 
 fun Application.paymentRouting() {
     routing {
+        get("/order/test"){
+            call.respondText("This is order service")
+        }
+
         // Создать заказ
         post("/order") {
             val order = call.receive<Order>()
             OrderController.addOrder(order)
+
+            // Формируем корректное сообщение для RabbitMQ
+            val paymentMessage = """
+                                {
+                                    "paymentId": "${UUID.randomUUID()}", 
+                                    "title": "Order ${order.orderId} ",
+                                    "details": "Order ${order.orderId} details",
+                                    "amount": ${order.totalAmount},
+                                    "paymentMethod": "Card"
+                                }
+                                """.trimIndent()
+
+            RabbitMQProducer.sendMessage(paymentMessage)
+
             call.respond(HttpStatusCode.Created, "Заказ успешно создан")
         }
+
 
         // Получить все заказы
         get("/order") {
@@ -25,7 +45,7 @@ fun Application.paymentRouting() {
 
         // Получить информацию о заказе
         get("/order/{orderId}") {
-            val orderId = call.parameters["orderId"]?.toIntOrNull()
+            val orderId = call.parameters["orderId"]?.toString()
             if (orderId == null) {
                 call.respond(HttpStatusCode.BadRequest, "Неверный идентификатор заказа")
                 return@get
@@ -81,7 +101,7 @@ fun Application.paymentRouting() {
 
 
 private suspend fun updateOrderStatus(call: ApplicationCall, newStatus: String) {
-    val orderId = call.parameters["orderId"]?.toIntOrNull()
+    val orderId = call.parameters["orderId"]?.toString()
     if (orderId == null) {
         call.respond(HttpStatusCode.BadRequest, "Неверный идентификатор заказа")
         return

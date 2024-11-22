@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 
 object OrderController {
-    private val orders = ConcurrentHashMap<Int, Order>()
+    private val orders = ConcurrentHashMap<String, Order>()
     private val cart = ConcurrentLinkedQueue<CartItem>()
 
     fun addOrder(order: Order) {
@@ -15,11 +15,11 @@ object OrderController {
         return orders.values.toList().drop(offset).take(count)
     }
 
-    fun getOrderById(orderId: Int): Order? {
+    fun getOrderById(orderId: String): Order? {
         return orders[orderId]
     }
 
-    fun updateOrderStatus(orderId: Int, newStatus: String): Boolean {
+    fun updateOrderStatus(orderId: String, newStatus: String): Boolean {
         val order = orders[orderId]
         return if (order != null) {
             orders[orderId] = order.copy(status = newStatus)

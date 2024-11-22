@@ -9,12 +9,13 @@ import org.jetbrains.exposed.sql.Database
 
 fun main(args: Array<String>) {
     Database.connect(
-        url = "jdbc:postgresql://localhost:5432/ma_db",
+        url = "jdbc:postgresql://${System.getenv("POSTGRES_HOST")}:${System.getenv("POSTGRES_PORT")}/${System.getenv("POSTGRES_DB")}",
         driver = "org.postgresql.Driver",
         user = "postgres",
         password = "baksik"
     )
 
+    RabbitMQConsumer.startListening()
     EngineMain.main(args)
 }
 
