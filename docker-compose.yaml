@@ -1,5 +1,9 @@
 version: '3.1'
 
+volumes:
+  rabbitmq_data:
+  postgres_data:
+
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -13,18 +17,20 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
-#  db:
-#    image: postgres
-#    container_name: postgres
-#    restart: always
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=baksik
-#      - POSTGRES_DB=ma_db
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data
-#    ports:
-#      - "5432:5432"
+  db:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=baksik
+      - POSTGRES_DB=ma_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
 
   order-service:
     restart: always
@@ -55,15 +61,11 @@ services:
       - RABBITMQ_PORT=5672
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=1234
-      - POSTGRES_HOST=host.docker.internal
+      - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=baksik
       - POSTGRES_DB=ma_db
     depends_on:
       - rabbitmq
-#      - db
-
-volumes:
-  rabbitmq_data:
-#  postgres_data:
+      - db

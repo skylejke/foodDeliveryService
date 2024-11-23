@@ -30,7 +30,7 @@ object CardTable : Table("cards") {
     fun deleteCard(cardId: String): Boolean {
         return transaction {
             val deletedRows = CardTable.deleteWhere { CardTable.cardId eq cardId }
-            deletedRows > 0 // Возвращает true, если хотя бы одна запись была удалена
+            deletedRows > 0
         }
     }
 }

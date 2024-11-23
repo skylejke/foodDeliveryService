@@ -19,7 +19,5 @@ object PaymentController {
     fun payOrder(paymentId: String): Boolean {
         val payment = PaymentTable.getAllPayments().find { it.paymentId == paymentId }
         return payment != null
-        // Логика обработки успешной оплаты
-        // Например, обновление статуса оплаты (если нужно)
     }
 }

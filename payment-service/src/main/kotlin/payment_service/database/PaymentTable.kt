@@ -8,13 +8,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 
 object PaymentTable : Table("payments") {
-    val paymentId = varchar("payment_id", 50) // Primary Key
-    val title = varchar("title", 255)                     // VARCHAR(255)
-    val details = varchar("order_details", 255)      // VARCHAR(255)
-    val amount = decimal("amount", 10, 2)                 // NUMERIC(10, 2)
-    val paymentMethod = varchar("payment_method", 100)    // VARCHAR(100)
+    val paymentId = varchar("payment_id", 50)
+    val title = varchar("title", 255)
+    val details = varchar("order_details", 255)
+    val amount = decimal("amount", 10, 2)
+    val paymentMethod = varchar("payment_method", 100)
 
-    override val primaryKey = PrimaryKey(paymentId)       // Устанавливаем primary key
+    override val primaryKey = PrimaryKey(paymentId)
 
     fun addPayment(paymentDTO: PaymentDTO): String {
         return transaction {
@@ -22,9 +22,9 @@ object PaymentTable : Table("payments") {
                 it[paymentId] = paymentDTO.paymentId
                 it[title] = paymentDTO.title
                 it[details] = paymentDTO.details
-                it[amount] = paymentDTO.amount.toBigDecimal() // Преобразуем в BigDecimal
+                it[amount] = paymentDTO.amount.toBigDecimal()
                 it[paymentMethod] = paymentDTO.paymentMethod
-            } get paymentId // Возвращаем ID новой записи
+            } get paymentId
         }
     }
 
@@ -53,7 +53,7 @@ object PaymentTable : Table("payments") {
                         amount = it[amount].toDouble(),
                         paymentMethod = it[paymentMethod]
                     )
-                }.singleOrNull() // Возвращаем одну запись или null
+                }.singleOrNull()
         }
     }
 }
