@@ -5,6 +5,7 @@ logback-version = "1.4.14"
 exposed-version = "0.43.0"
 postgresql-version = "42.7.2"
 rabbitmq-version = "5.18.0"
+call-version = "2.3.2"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor-version" }
@@ -21,6 +22,8 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 exposed-datetime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed-version" }
 postrgre = { module = "org.postgresql:postgresql", version.ref = "postgresql-version" }
 rabbitmq = { module = "com.rabbitmq:amqp-client", version.ref = "rabbitmq-version" }
+call-id-jvm = {module = "io.ktor:ktor-server-call-id-jvm", version.ref = "call-version"}
+call-logging-jvm = {module = "io.ktor:ktor-server-call-logging-jvm", version.ref = "call-version"}
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }

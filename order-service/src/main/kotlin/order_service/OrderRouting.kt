@@ -7,7 +7,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.util.UUID
 
-fun Application.paymentRouting() {
+fun Application.orderRouting() {
     routing {
         get("/order/test"){
             call.respondText("This is order service")

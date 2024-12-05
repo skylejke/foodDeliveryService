@@ -21,6 +21,8 @@ repositories {
 
 dependencies {
     implementation(project(":payment-service"))
+    implementation(libs.call.id.jvm)
+    implementation(libs.call.logging.jvm)
     implementation(libs.rabbitmq)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
