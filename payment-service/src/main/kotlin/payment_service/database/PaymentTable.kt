@@ -8,11 +8,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 
 object PaymentTable : Table("payments") {
-    val paymentId = varchar("payment_id", 50)
-    val title = varchar("title", 255)
-    val details = varchar("order_details", 255)
-    val amount = decimal("amount", 10, 2)
-    val paymentMethod = varchar("payment_method", 100)
+    private val paymentId = varchar("payment_id", 50)
+    private val title = varchar("title", 255)
+    private val details = varchar("order_details", 255)
+    private val amount = decimal("amount", 10, 2)
+    private val paymentMethod = varchar("payment_method", 100)
 
     override val primaryKey = PrimaryKey(paymentId)
 

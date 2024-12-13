@@ -1,43 +1,19 @@
 package order_service
 
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentLinkedQueue
+import order_service.database.OrderDTO
+import order_service.database.OrderTable
 
 object OrderController {
-    private val orders = ConcurrentHashMap<String, Order>()
-    private val cart = ConcurrentLinkedQueue<CartItem>()
+    fun addOrder(orderDTO: OrderDTO): String = OrderTable.addOrder(orderDTO)
 
-    fun addOrder(order: Order) {
-        orders[order.orderId] = order
-    }
+    fun getAllOrders(count: Int, offset: Int): List<OrderDTO> =
+        OrderTable.getAllOrders()
+            .drop(offset)
+            .take(count)
 
-    fun getAllOrders(count: Int, offset: Int): List<Order> {
-        return orders.values.toList().drop(offset).take(count)
-    }
 
-    fun getOrderById(orderId: String): Order? {
-        return orders[orderId]
-    }
+    fun getOrderById(orderId: String): OrderDTO? = OrderTable.getOrderById(orderId)
 
-    fun updateOrderStatus(orderId: String, newStatus: String): Boolean {
-        val order = orders[orderId]
-        return if (order != null) {
-            orders[orderId] = order.copy(status = newStatus)
-            true
-        } else {
-            false
-        }
-    }
-
-    fun clearCart() {
-        cart.clear()
-    }
-
-    fun getCartItems(): List<CartItem> {
-        return cart.toList()
-    }
-
-    fun addItemToCart(item: CartItem) {
-        cart.add(item)
-    }
+    fun updateOrderStatus(orderId: String, newStatus: String): Boolean =
+        OrderTable.updateOrderStatus(orderId, newStatus)
 }

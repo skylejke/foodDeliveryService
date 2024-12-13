@@ -10,6 +10,10 @@ import payment_service.database.mapToPaymentDTO
 
 fun Application.orderRouting() {
     routing {
+        get("/payment/test") {
+            call.respondText("This is payment service")
+        }
+
         // Создать оплату
         post("/payment") {
             try {
@@ -18,7 +22,7 @@ fun Application.orderRouting() {
                 val paymentId = PaymentController.addPayment(payment)
                 call.respond(HttpStatusCode.Created, mapOf("paymentId" to paymentId))
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, "Ошибка создания платежа: ${e.message}")
+                call.respond(HttpStatusCode.BadRequest, "Payment creation error: ${e.message}")
             }
         }
 
@@ -32,33 +36,29 @@ fun Application.orderRouting() {
 
         // Получить информацию об оплате
         get("/payment/{paymentId}") {
-            val paymentId = call.parameters["paymentId"]?.toString()
+            val paymentId = call.parameters["paymentId"]
             if (paymentId == null) {
-                call.respond(HttpStatusCode.BadRequest, "Неверный идентификатор платежа")
+                call.respond(HttpStatusCode.BadRequest, "Invalid payment ID")
                 return@get
             }
             val payment = PaymentController.getPaymentById(paymentId)
-            if (payment == null) {
-                call.respond(HttpStatusCode.NotFound, "Платеж не найден")
-            } else {
+            if (payment == null)
+                call.respond(HttpStatusCode.NotFound, "The payment was not found")
+            else
                 call.respond(HttpStatusCode.OK, payment)
-            }
         }
 
         // Оплатить заказ
         patch("/payment/{paymentId}/pay") {
-            val paymentId = call.parameters["paymentId"]?.toString()
+            val paymentId = call.parameters["paymentId"]
             if (paymentId == null) {
-                call.respond(HttpStatusCode.BadRequest, "Неверный идентификатор платежа")
+                call.respond(HttpStatusCode.BadRequest, "Invalid payment ID")
                 return@patch
             }
-
-            val success = PaymentController.payOrder(paymentId)
-            if (success) {
-                call.respond(HttpStatusCode.OK, "Заказ успешно оплачен")
-            } else {
-                call.respond(HttpStatusCode.NotFound, "Платеж не найден")
-            }
+            if (PaymentController.payOrder(paymentId))
+                call.respond(HttpStatusCode.OK, "The order has been successfully paid for")
+            else
+                call.respond(HttpStatusCode.NotFound, "The payment was not found")
         }
 
         // Привязать карту
@@ -67,25 +67,23 @@ fun Application.orderRouting() {
                 val cardRequest = call.receive<CreateCardRequest>()
                 val card = cardRequest.mapToCardDTO()
                 CardController.addCard(card)
-                call.respond(HttpStatusCode.Created, "Карта успешно привязана")
+                call.respond(HttpStatusCode.Created, "The card has been successfully linked")
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, "Ошибка привязки карты: ${e.message}")
+                call.respond(HttpStatusCode.BadRequest, "Error linking the card: ${e.message}")
             }
         }
 
         // Удалить карту
         delete("/payment/cards/{cardId}") {
-            val cardId = call.parameters["cardId"]?.toString()
+            val cardId = call.parameters["cardId"]
             if (cardId == null) {
-                call.respond(HttpStatusCode.BadRequest, "Неверный идентификатор карты")
+                call.respond(HttpStatusCode.BadRequest, "Invalid card ID")
                 return@delete
             }
-            val success = CardController.deleteCard(cardId)
-            if (success) {
-                call.respond(HttpStatusCode.OK, "Карта успешно удалена")
-            } else {
-                call.respond(HttpStatusCode.NotFound, "Карта не найдена")
-            }
+            if (CardController.deleteCard(cardId))
+                call.respond(HttpStatusCode.OK, "The card was successfully deleted")
+            else
+                call.respond(HttpStatusCode.NotFound, "The card was not found")
         }
     }
 }

@@ -9,10 +9,10 @@ import java.time.LocalDate.parse
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 object CardTable : Table("cards") {
-    val cardId = varchar("card_id", 50)
-    val cardNumber = varchar("card_number", 16)
-    val expiryDate = date("expiry_date")
-    val cvv = varchar("cvv", 4)
+    private val cardId = varchar("card_id", 50)
+    private val cardNumber = varchar("card_number", 16)
+    private val expiryDate = date("expiry_date")
+    private val cvv = varchar("cvv", 4)
 
     override val primaryKey = PrimaryKey(cardId)
 

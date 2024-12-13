@@ -20,6 +20,10 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.ktor.server.metrics.micrometer)
+    implementation(libs.micrometer.registry.prometheus)
+    implementation(libs.mock)
+    implementation(libs.h2)
     implementation(libs.rabbitmq)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
@@ -34,8 +38,4 @@ dependencies {
     implementation(libs.postrgre)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
-}
-
-application {
-    mainClass.set("payment_service.ApplicationKt")
 }
