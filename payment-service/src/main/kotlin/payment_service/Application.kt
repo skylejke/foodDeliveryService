@@ -1,13 +1,11 @@
 package payment_service
 
-import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
 import io.micrometer.prometheus.PrometheusConfig
@@ -38,9 +36,6 @@ fun Application.module(testing: Boolean = false) {
         json()
     }
     routing {
-        get("/metrics") {
-            call.respondText(prometheusMeterRegistry.scrape(), ContentType.Text.Plain)
-        }
         orderRouting()
     }
 }

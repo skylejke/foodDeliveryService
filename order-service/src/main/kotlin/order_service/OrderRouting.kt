@@ -1,14 +1,11 @@
-package ru.food_delivery.order
+package order_service
 
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import order_service.CreateOrderRequest
-import order_service.OrderController
 import order_service.database.mapToOrderDTO
-import order_service.RabbitMQProducer
 import java.util.UUID
 
 fun Application.orderRouting() {
